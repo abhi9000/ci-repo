@@ -1,0 +1,22 @@
+# ci-repo/kaniko-pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    jenkins: kaniko
+spec:
+  containers:
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:latest
+    imagePullPolicy: Always
+    command:
+    - cat
+    tty: true
+    volumeMounts:
+    - name: aws-secret
+      mountPath: /root/.aws
+  volumes:
+  - name: aws-secret
+    secret:
+      secretName: aws-secret
+
