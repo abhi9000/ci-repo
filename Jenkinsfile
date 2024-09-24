@@ -1,4 +1,3 @@
-// ci-repo/Jenkinsfile
 pipeline {
     agent {
         kubernetes {
@@ -16,7 +15,11 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/abhi9000/ci-repo.git'
+                // The code is checked out to /home/jenkins/agent in the 'jnlp' container
+                // We need to copy it to the kaniko container's workspace
+                container('jnlp') {
+                    sh 'cp -r /home/jenkins/agent/* /workspace/'
+                }
             }
         }
         stage('Build and Push Docker Image') {
@@ -25,7 +28,7 @@ pipeline {
                     sh '''
                     /kaniko/executor \
                       --dockerfile=Dockerfile \
-                      --context=`pwd` \
+                      --context=/workspace \
                       --destination=${ECR_URI} \
                       --cache=true \
                       --insecure \
