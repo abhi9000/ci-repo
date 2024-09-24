@@ -15,11 +15,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // The code is checked out to /home/jenkins/agent in the 'jnlp' container
-                // We need to copy it to the kaniko container's workspace
-                container('jnlp') {
-                    sh 'cp -r /home/jenkins/agent/* /workspace/'
-                }
+                // The code is checked out to /workspace in the 'jnlp' container
+                checkout scm
             }
         }
         stage('Build and Push Docker Image') {
