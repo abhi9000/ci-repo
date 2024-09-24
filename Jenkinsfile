@@ -4,9 +4,11 @@ pipeline {
         kubernetes {
             inheritFrom 'kaniko'
             defaultContainer 'kaniko'
-            
         }
     }
+    
+}
+
     environment {
         AWS_ACCOUNT_ID = '891377024727'
         AWS_DEFAULT_REGION = 'us-east-1'
